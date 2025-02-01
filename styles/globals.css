@@ -3,19 +3,131 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --text-glow: #27f7f7;
+  --bg-dark: #111;
+  --border-glow: #3acaec;
+  --box-shadow-glow: #7Cbdbd;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-glow);
+  font-family: "Share Tech Mono", monospace;
 }
+
+.console-box {
+  background: #141414;
+  border: 2px solid var(--border-glow);
+  box-shadow: 0px 0px 15px 2px var(--box-shadow-glow) inset;
+  border-radius: 5px;
+  padding: 1.875rem;
+  transition: all 0.3s ease;
+}
+
+.console-box:hover {
+  box-shadow: 0px 0px 20px 4px var(--box-shadow-glow) inset;
+}
+
+/* Quill Editor Customization */
+.editor-wrapper {
+  margin-top: 0.5rem;
+}
+
+.ql-toolbar.ql-snow {
+  border: 2px solid var(--border-glow) !important;
+  background: rgba(20, 20, 20, 0.9);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow) inset;
+}
+
+.ql-container.ql-snow {
+  border: 2px solid var(--border-glow) !important;
+  border-top: none !important;
+  background: rgba(20, 20, 20, 0.9);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow) inset;
+  min-height: 200px;
+}
+
+.ql-editor {
+  color: var(--text-glow);
+  font-family: "Share Tech Mono", monospace;
+  min-height: 200px;
+}
+
+.ql-editor.ql-blank::before {
+  color: #22c7c7 !important;
+  font-style: normal !important;
+}
+
+/* Toolbar button styles */
+.ql-snow .ql-stroke {
+  stroke: var(--text-glow) !important;
+}
+
+.ql-snow .ql-fill {
+  fill: var(--text-glow) !important;
+}
+
+.ql-snow .ql-picker {
+  color: var(--text-glow) !important;
+}
+
+.ql-snow .ql-picker-options {
+  background-color: #141414 !important;
+  border-color: var(--border-glow) !important;
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow);
+}
+
+.ql-snow .ql-tooltip {
+  background-color: #141414 !important;
+  border-color: var(--border-glow) !important;
+  color: var(--text-glow) !important;
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow);
+}
+
+.console-input {
+  @apply w-full bg-transparent border-2 rounded-md p-3;
+  border-color: var(--border-glow);
+  color: var(--text-glow);
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow) inset;
+  font-family: "Share Tech Mono", monospace;
+}
+
+.console-button {
+  @apply px-6 py-2 rounded-md transition-all duration-300;
+  background: transparent;
+  border: 2px solid var(--border-glow);
+  color: var(--text-glow);
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow) inset;
+  font-family: "Share Tech Mono", monospace;
+}
+
+.console-button:hover {
+  @apply transform scale-105;
+  box-shadow: 0px 0px 15px 2px var(--box-shadow-glow) inset;
+}
+
+/* Input placeholder styling */
+input::placeholder {
+  color:#22c7c7;
+}
+
+.note-card {
+  border: 1px solid var(--border-glow);
+  padding: 1rem;
+  margin: 1rem 0;
+  background: rgba(20, 20, 20, 0.7);
+  box-shadow: 0 0 10px var(--box-shadow-glow);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.note-card:hover {
+  box-shadow: 0 0 15px var(--box-shadow-glow);
+  background: rgba(0, 91, 91, 0.256);
+  transform: scale(1.01);
+}
+
