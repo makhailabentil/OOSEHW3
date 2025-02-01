@@ -1,9 +1,11 @@
+import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import NoteForm from '../components/NoteForm';
 import NoteList from '../components/NoteList';
 
 export default function Home() {
+  const { user, login, logout } = useAuth();
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState(null);
 
@@ -47,23 +49,38 @@ export default function Home() {
         <div className="margin-line"></div>
         <div className="cyber-content">
           <main className="container mx-auto py-8 px-4">
-            <h1 className="text-4xl text-center mb-8 text-[#27f7f7]">
-              {"DevNotes"}
-            </h1>
-            
-            {error && (
-              <div className="text-red-500 text-center mb-4">
-                {error}
-              </div>
-            )}
-            
-            <div className="mb-8">
-              <NoteForm onSubmit={handleNewNote} />
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-4xl text-center text-[#27f7f7]">
+                {"DevNotes"}
+              </h1>
+              {user && (
+                <button onClick={logout} className="console-button">
+                  {'>'} LOGOUT
+                </button>
+              )}
             </div>
 
-            <div className="max-w-lg mx-auto border-t border-gray-200 my-8"></div>
-
-            <NoteList notes={notes} />
+            {!user ? (
+              <div className="text-center py-12">
+                <h2 className="text-2xl mb-6 text-[#27f7f7]">{'>'} ACCESS_REQUIRED</h2>
+                <button onClick={login} className="console-button">
+                  {'>'} LOGIN_WITH_GOOGLE
+                </button>
+              </div>
+            ) : (
+              <>
+                {error && (
+                  <div className="text-red-500 text-center mb-4">
+                    {error}
+                  </div>
+                )}
+                <div className="mb-8">
+                  <NoteForm onSubmit={handleNewNote} />
+                </div>
+                <div className="max-w-lg mx-auto border-t border-gray-200 my-8"></div>
+                <NoteList notes={notes} />
+              </>
+            )}
           </main>
         </div>
       </div>
