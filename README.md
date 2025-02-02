@@ -1,10 +1,53 @@
 # DevNotes
 
-A minimalist note-taking application designed specifically for developers to capture and organize their technical learnings, code snippets, and development notes. Built with Next.js and MongoDB, DevNotes offers a clean interface for creating and viewing notes with automatic timestamp tracking.
+A minimalist note-taking application designed specifically for developers to capture and organize their technical learnings, code snippets, and development notes. Built with Next.js, Firebase Authentication, and MongoDB, DevNotes offers a clean interface with a Tron-inspired design.
+
+## Tech Stack
+
+- **Frontend**: 
+  - Next.js 15.1.6
+  - React 18.2.0
+  - React Quill (Rich Text Editor)
+  - TailwindCSS 3.4.1
+
+- **Backend**: 
+  - Next.js API Routes
+  - MongoDB with Mongoose
+  - Firebase Authentication
+
+- **Authentication**:
+  - Firebase Auth with Google Sign-in
+  - JWT-based API authorization
+
+- **Database**:
+  - MongoDB Atlas
+  - Mongoose ODM
 
 ## Installing / Getting started
 
-To run DevNotes locally, you'll need Node.js (v18 or higher), npm, and a MongoDB Atlas account.
+### Prerequisites
+1. Node.js (v18+)
+2. MongoDB Atlas account
+3. Firebase project credentials
+
+### Environment Setup
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```shell
+# MongoDB
+MONGODB_URI=your_mongodb_connection_string
+
+# Firebase
+NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_firebase_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+```
+
+### Installation Steps
 
 ```shell
 # Clone the repository
@@ -13,9 +56,6 @@ cd devnotes
 
 # Install dependencies
 npm install
-
-# Create .env.local and add your MongoDB URI
-echo "MONGODB_URI=your_mongodb_connection_string" > .env.local
 
 # Start the development server
 npm run dev
@@ -23,93 +63,58 @@ npm run dev
 
 Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Developing
+### Authentication Setup
 
-### Prerequisites
-1. Install Node.js (v18+) from [nodejs.org](https://nodejs.org/)
-2. Create a free [MongoDB Atlas account](https://www.mongodb.com/cloud/atlas/register)
-3. Set up a MongoDB cluster and get your connection string
-
-### Development Environment Setup
-```shell
-# Clone the repository
-git clone [your-repo-url]
-cd devnotes
-
-# Install dependencies
-npm install
-
-# Create and edit .env.local
-echo "MONGODB_URI=your_mongodb_connection_string" > .env.local
-
-# Start development server with hot reload
-npm run dev
-
-# Run linting
-npm run lint
-```
+1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com)
+2. Enable Google Authentication in Firebase Auth settings
+3. Add your domain to authorized domains
+4. Copy your Firebase config to `.env.local`
+5. Test authentication by clicking the "LOGIN_WITH_GOOGLE" button
 
 ### Database Configuration
 1. Create a MongoDB Atlas cluster
-2. Add your IP address to the allowlist in Network Access
-3. Create a database user in Database Access
-4. Get your connection string from the Connect button
-5. Replace `your_mongodb_connection_string` in `.env.local`
+2. Add your IP address to the allowlist
+3. Create a database user
+4. Get your connection string
+5. Add the connection string to `.env.local`
 
-### Project Structure
+## Project Structure
 ```
 devnotes/
 ├── components/          # React components
-│   ├── NoteForm.js     # Form for creating notes
-│   └── NoteList.js     # Display list of notes
-├── lib/
-│   └── dbConnect.js    # MongoDB connection utility
-├── models/
-│   └── Note.js         # Mongoose Note model
+├── contexts/           # Auth context
+├── lib/               
+│   ├── dbConnect.js    # MongoDB connection
+│   └── firebase.js     # Firebase configuration
+├── models/             # Mongoose models
 ├── pages/
-│   ├── api/
-│   │   └── notes.js    # API endpoints for notes
-│   └── index.js        # Main application page
-└── styles/
-    └── globals.css     # Global styles and Tailwind imports
+│   ├── api/           # API endpoints
+│   └── index.js       # Main page
+└── styles/            # Global styles
 ```
 
-### Dependencies
-- **Frontend**: Next.js 15.1.6, React 19.0.0
-- **Database**: MongoDB 6.12.0, Mongoose 8.9.5
-- **Styling**: Tailwind CSS 3.4.1, @tailwindcss/forms 0.5.10
-- **Date Formatting**: date-fns 4.1.0
+## Features
+- Google Authentication
+- Rich Text Editor with image support
+- Real-time note creation
+- Chronological note listing
+- Responsive design
+- User-specific notes
 
-### API Endpoints
-- `GET /api/notes` - Retrieve all notes
-- `POST /api/notes` - Create a new note
+## API Endpoints
+- `GET /api/notes` - Fetch user's notes (requires authentication)
+- `POST /api/notes` - Create new note (requires authentication)
 
-### Database Schema
+## Database Schema
 ```javascript
 Note {
   title: String,      // Required
   content: String,    // Required
+  userId: String,     // Required, from Firebase Auth
   createdAt: Date,    // Auto-generated
   updatedAt: Date     // Auto-updated
 }
 ```
-
-### Building and Deployment
-```shell
-# Create production build
-npm run build
-
-# Start production server
-npm start
-```
-
-### Code Style
-- Uses ESLint with Next.js configuration
-- Run `npm run lint` to check code style
-- Prettier is recommended for code formatting
-
-### Testing
-Currently, the project doesn't include automated tests. This is planned for future iterations.
 
 ## Additional Development Notes
 
@@ -128,18 +133,3 @@ Currently, the project doesn't include automated tests. This is planned for futu
   rm -rf node_modules
   npm install
   ```
-
-### Future Improvements
-- User authentication
-- Note search functionality
-- Edit and delete capabilities
-- Markdown support
-- Tags and categories
-- Dark mode toggle
-
-### Contributing
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes
-4. Push to the branch
-5. Open a pull request
