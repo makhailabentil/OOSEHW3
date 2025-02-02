@@ -77,11 +77,11 @@ export default function Home() {
       <div className="cyber-paper">
         <div className="spiral-binding"></div>
         <div className="margin-line"></div>
-        <div className="cyber-content">
+        <div className="cyber-content min-h-screen flex justify-center items-center">
           <main className="max-w-4xl mx-auto py-8 px-4">
             <div className="flex justify-between items-center mb-8">
               <div className="w-8"></div>
-              <h1 className="text-4xl text-center text-[#27f7f7]">
+              <h1 className="text-7xl text-center text-[#27f7f7]">
                 {"DevNotes"}
               </h1>
               {user ? (
@@ -97,6 +97,16 @@ export default function Home() {
               </div>
             ) : !user ? (
               <div className="text-center py-12">
+                <h1 className="text-5xl text-center text-[#13ffff] mb-12 italic text-glow">
+                  {"Start Taking Notes Here!"}
+                </h1>
+                <div className="code-logo mb-20">
+                  <img 
+                    src="/logo.png" 
+                    alt="DevNotes Logo" 
+                    className="w-77 h-77 mx-auto filter-cyan hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
                 <h2 className="text-2xl mb-6 text-[#27f7f7]">{'>'} ACCESS_REQUIRED</h2>
                 <button onClick={login} className="console-button">
                   {'>'} LOGIN_WITH_GOOGLE
@@ -110,7 +120,7 @@ export default function Home() {
                   </div>
                 )}
                 <div className="mb-8">
-                  <NoteForm onSubmit={handleNewNote} />
+                  <NoteForm onSubmit={handleNewNote} user={user} />
                 </div>
                 <div className="border-t border-gray-200 my-8"></div>
                 <NoteList notes={notes} />
