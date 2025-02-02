@@ -5,10 +5,20 @@ export default async function handler(req, res) {
   try {
     await dbConnect();
 
+    // Get userId from Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const userId = authHeader.split(' ')[1];
+
     switch (req.method) {
       case 'GET':
         try {
-          const notes = await Note.find({}).sort({ createdAt: -1 }).lean();
+          // Only fetch notes for the specific user
+          const notes = await Note.find({ userId })
+            .sort({ createdAt: -1 })
+            .lean();
           return res.status(200).json(notes);
         } catch (error) {
           return res.status(400).json({ success: false, error: error.message });
@@ -16,7 +26,9 @@ export default async function handler(req, res) {
 
       case 'POST':
         try {
-          const note = await Note.create(req.body);
+          // Add userId to the note data
+          const noteData = { ...req.body, userId };
+          const note = await Note.create(noteData);
           return res.status(201).json({ success: true, data: note });
         } catch (error) {
           return res.status(400).json({ success: false, error: error.message });

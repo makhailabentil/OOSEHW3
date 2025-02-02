@@ -62,7 +62,7 @@ const ReactQuill = dynamic(
   { ssr: false }
 );
 
-export default function NoteForm({ onSubmit }) {
+export default function NoteForm({ onSubmit, user }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [error, setError] = useState(null);
@@ -82,7 +82,6 @@ export default function NoteForm({ onSubmit }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     
     if (!title.trim() || !content.trim()) {
       setError('Title and content are required');
@@ -94,17 +93,22 @@ export default function NoteForm({ onSubmit }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.uid}`
         },
         body: JSON.stringify({ title, content }),
       });
 
-      if (!res.ok) throw new Error('Failed to create note');
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to create note');
+      }
 
       const data = await res.json();
       onSubmit && onSubmit(data);
       
       setTitle('');
       setContent('');
+      setError(null);
     } catch (error) {
       console.error('Error creating note:', error);
       setError('Failed to create note. Please try again.');
