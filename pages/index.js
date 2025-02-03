@@ -20,6 +20,8 @@ export default function Home() {
 
     try {
       setLoading(true);
+      console.log('Fetching notes for user:', user.uid);
+      
       const res = await fetch('/api/notes', {
         headers: {
           'Authorization': `Bearer ${user.uid}`
@@ -28,13 +30,15 @@ export default function Home() {
       
       if (!res.ok) {
         const errorData = await res.json();
+        console.error('API Error Response:', errorData);
         throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
       }
       
       const data = await res.json();
+      console.log('Fetched notes:', data);
       setNotes(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error('Error fetching notes:', error);
+      console.error('Error in fetchNotes:', error);
       setError('Failed to fetch notes');
     } finally {
       setLoading(false);
