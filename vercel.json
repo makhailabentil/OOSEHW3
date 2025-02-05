@@ -1,7 +1,25 @@
 {
-    "builds": [
-      { "src": "package.json", "use": "@vercel/next" }
-    ],
-    "rewrites": [{ "source": "/(.*)", "destination": "/" }]
-  }
-  
+  "version": 2,
+  "builds": [
+    { 
+      "src": "package.json",
+      "use": "@vercel/next",
+      "config": {
+        "timeout": 60
+      }
+    }
+  ],
+  "env": {
+    "VERCEL_URL": "devnotes-nth2hsc1b-makhailabentils-projects.vercel.app"
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
+}
