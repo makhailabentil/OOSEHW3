@@ -23,9 +23,10 @@ export default async function handler(req, res) {
           return res.status(404).json({ error: 'Note not found' });
         }
         await Note.deleteOne({ _id: id, userId });
-        return res.status(200).json({ success: true });
+        return res.status(200).json({ success: true, message: 'Note deleted successfully' });
       } catch (error) {
-        return res.status(400).json({ error: error.message });
+        console.error('Delete error:', error);
+        return res.status(500).json({ error: error.message || 'Failed to delete note' });
       }
 
     case 'PUT':

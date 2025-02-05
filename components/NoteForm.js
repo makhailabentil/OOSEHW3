@@ -70,14 +70,15 @@ export default function NoteForm({ onSubmit, user, initialData }) {
         body: JSON.stringify({ title, content })
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to save note');
+        throw new Error(data.error || 'Failed to save note');
       }
 
-      const data = await res.json();
-      onSubmit && onSubmit(data);
-
+      // For both new notes and updates
+      onSubmit && onSubmit(data.data || data);
+      
       if (!initialData) {
         setTitle('');
         setContent('');
@@ -85,7 +86,7 @@ export default function NoteForm({ onSubmit, user, initialData }) {
       setError(null);
     } catch (error) {
       console.error('Error saving note:', error);
-      setError('Failed to save note. Please try again.');
+      setError(`Failed to save note: ${error.message}`);
     }
   };
 

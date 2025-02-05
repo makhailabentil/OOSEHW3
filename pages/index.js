@@ -75,18 +75,21 @@ export default function Home() {
       const res = await fetch(`/api/notes/${noteId}`, {
         method: 'DELETE',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${user.uid}`
         }
       });
 
+      const data = await res.json();
+      
       if (!res.ok) {
-        throw new Error('Failed to delete note');
+        throw new Error(data.error || 'Failed to delete note');
       }
 
       await fetchNotes(); // Refresh notes after deletion
     } catch (error) {
       console.error('Error deleting note:', error);
-      setError('Failed to delete note');
+      setError(`Failed to delete note: ${error.message}`);
     }
   };
 
