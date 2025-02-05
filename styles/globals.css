@@ -1,0 +1,248 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --text-glow: #27f7f7;
+  --bg-dark: #111;
+  --border-glow: #3acaec;
+  --box-shadow-glow: #7Cbdbd;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-glow);
+  font-family: "Share Tech Mono", monospace;
+}
+
+.console-box {
+  background: #141414;
+  border: 2px solid var(--border-glow);
+  box-shadow: 0px 0px 15px 2px var(--box-shadow-glow) inset;
+  border-radius: 5px;
+  padding: 1.875rem;
+  transition: all 0.3s ease;
+}
+
+.console-box:hover {
+  box-shadow: 0px 0px 20px 4px var(--box-shadow-glow) inset;
+}
+
+/* Quill Editor Customization */
+.editor-wrapper {
+  margin-top: 0.5rem;
+}
+
+.ql-toolbar.ql-snow {
+  border: 2px solid var(--border-glow) !important;
+  background: rgba(20, 20, 20, 0.9);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow) inset;
+}
+
+.ql-toolbar.ql-snow .ql-formats {
+  margin-right: 12px;
+}
+
+.ql-container.ql-snow {
+  border: 2px solid var(--border-glow) !important;
+  border-top: none !important;
+  background: rgba(20, 20, 20, 0.9);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow) inset;
+  min-height: 200px;
+}
+
+.ql-editor {
+  color: var(--text-glow);
+  font-family: "Share Tech Mono", monospace;
+  min-height: 200px;
+}
+
+.ql-editor.ql-blank::before {
+  color: #22c7c7 !important;
+  font-style: normal !important;
+}
+
+/* Toolbar button styles */
+.ql-snow .ql-picker,
+.ql-snow .ql-stroke {
+  stroke: var(--text-glow) !important;
+}
+
+.ql-snow .ql-fill {
+  fill: var(--text-glow) !important;
+}
+
+/* Active state highlighting */
+.ql-snow .ql-picker.ql-expanded .ql-picker-label,
+.ql-snow .ql-picker.ql-expanded .ql-picker-options,
+.ql-snow.ql-toolbar button:hover,
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-item:hover,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected {
+  color: var(--border-glow) !important;
+  stroke: var(--border-glow) !important;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill {
+  fill: var(--border-glow) !important;
+}
+
+/* Dropdown menu styling */
+.ql-snow .ql-picker-options {
+  background-color: rgba(20, 20, 20, 0.95) !important;
+  border-color: var(--border-glow) !important;
+  box-shadow: 0 0 10px var(--box-shadow-glow) !important;
+}
+
+/* Text color for dropdown items */
+.ql-snow .ql-picker-options .ql-picker-item {
+  color: var(--text-glow) !important;
+}
+
+/* Hover effect for toolbar buttons */
+.ql-snow.ql-toolbar button:hover,
+.ql-snow.ql-toolbar .ql-picker-label:hover {
+  box-shadow: 0 0 8px var(--box-shadow-glow);
+  border-radius: 3px;
+}
+
+/* Active button glow effect */
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active {
+  box-shadow: 0 0 4px var(--box-shadow-glow);
+  border-radius: px;
+  background: #27f7f733;
+}
+
+.console-input {
+  @apply w-full bg-transparent border-2 rounded-md p-3;
+  border-color: var(--border-glow);
+  color: var(--text-glow);
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow) inset;
+  font-family: "Share Tech Mono", monospace;
+}
+
+.console-button {
+  @apply px-6 py-2 rounded-md transition-all duration-300;
+  background: transparent;
+  border: 2px solid var(--border-glow);
+  color: var(--text-glow);
+  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow) inset;
+  font-family: "Share Tech Mono", monospace;
+}
+
+.console-button:hover {
+  @apply transform scale-105;
+  box-shadow: 0px 0px 15px 2px var(--box-shadow-glow) inset;
+}
+
+input::placeholder {
+  color:#22c7c7;
+}
+
+.note-card {
+  border: 1px solid var(--border-glow);
+  padding: 1rem;
+  margin: 1rem 0;
+  background: rgba(20, 20, 20, 0.7);
+  box-shadow: 0 0 10px var(--box-shadow-glow);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.note-card:hover {
+  box-shadow: 0 0 15px var(--box-shadow-glow);
+  background: rgba(0, 91, 91, 0.256);
+  transform: scale(1.01);
+}
+
+/* Image resize styles */
+.ql-editor .image-resizer {
+  border: 1px dashed var(--border-glow);
+  position: absolute;
+}
+
+.ql-editor .image-resizer .handle {
+  background-color: var(--text-glow);
+  border: 1px solid var(--border-glow);
+  border-radius: 2px;
+  height: 12px;
+  width: 12px;
+  position: absolute;
+  z-index: 1;
+}
+
+.ql-editor .image-resizer .handle.se {
+  bottom: -6px;
+  cursor: se-resize;
+  right: -6px;
+}
+
+.ql-editor .image-resizer .handle.sw {
+  bottom: -6px;
+  cursor: sw-resize;
+  left: -6px;
+}
+
+.ql-editor .image-resizer .handle.ne {
+  cursor: ne-resize;
+  right: -6px;
+  top: -6px;
+}
+
+.ql-editor .image-resizer .handle.nw {
+  cursor: nw-resize;
+  left: -6px;
+  top: -6px;
+}
+
+/* Make sure images are responsive */
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .cyber-paper {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .console-box {
+    padding: 1rem;
+  }
+
+  .text-7xl {
+    font-size: 3rem;
+  }
+
+  .editor-wrapper {
+    min-height: 200px;
+  }
+
+  .ql-container {
+    height: 200px;
+  }
+}
+
+@media (max-width: 640px) {
+  .note-card {
+    padding: 1rem;
+  }
+
+  .console-button {
+    padding: 0.5rem 1rem;
+  }
+}
+
