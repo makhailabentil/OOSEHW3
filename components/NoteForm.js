@@ -7,12 +7,8 @@ const ReactQuill = dynamic(
   async () => {
     const { default: RQ } = await import('react-quill');
     const { default: ImageResize } = await import('quill-image-resize-module-react');
-
-    // Import Quill and Parchment safely
     const Quill = (await import('quill')).default;
     const Parchment = Quill.import('parchment');
-
-    // Register image resize module
     Quill.register('modules/imageResize', ImageResize);
 
     const modules = {
@@ -49,8 +45,56 @@ export default function NoteForm({ onSubmit, user, initialData }) {
     }
   }, [initialData]);
 
+  const compressImage = async (dataUrl) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_SIZE = 800;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height && width > MAX_SIZE) {
+          height = Math.round((height * MAX_SIZE) / width);
+          width = MAX_SIZE;
+        } else if (height > MAX_SIZE) {
+          width = Math.round((width * MAX_SIZE) / height);
+          height = MAX_SIZE;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.5));
+      };
+      img.src = dataUrl;
+    });
+  };
+
+  const processContent = async (htmlContent) => {
+    const div = document.createElement('div');
+    div.innerHTML = htmlContent;
+    
+    const images = div.getElementsByTagName('img');
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
+      if (img.src.startsWith('data:image')) {
+        try {
+          const compressedDataUrl = await compressImage(img.src);
+          img.src = compressedDataUrl;
+        } catch (error) {
+          console.error('Error compressing image:', error);
+        }
+      }
+    }
+    
+    return div.innerHTML;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
     if (!title.trim() || !content.trim()) {
       setError('Title and content are required');
@@ -58,26 +102,34 @@ export default function NoteForm({ onSubmit, user, initialData }) {
     }
 
     try {
-      const url = initialData ? `/api/notes/${initialData._id}` : '/api/notes';
+      const processedContent = await processContent(content);
+      
+      const url = initialData 
+        ? `/api/notes/${initialData._id}`
+        : '/api/notes';
+      
       const method = initialData ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.uid}`
+          Authorization: `Bearer ${user.uid}`,
         },
-        body: JSON.stringify({ title, content })
+        body: JSON.stringify({
+          title: title.trim(),
+          content: processedContent
+        })
       });
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to save note');
+        throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
       }
 
       const data = await res.json();
       onSubmit && onSubmit(data);
-
+      
       if (!initialData) {
         setTitle('');
         setContent('');
@@ -85,7 +137,7 @@ export default function NoteForm({ onSubmit, user, initialData }) {
       setError(null);
     } catch (error) {
       console.error('Error saving note:', error);
-      setError('Failed to save note. Please try again.');
+      setError(`Failed to save note: ${error.message}`);
     }
   };
 
@@ -121,7 +173,7 @@ export default function NoteForm({ onSubmit, user, initialData }) {
           </div>
         </div>
         <button type="submit" className="console-button mt-4">
-          {"> SAVE_NOTE"}
+          {initialData ? '> UPDATE_NOTE' : '> SAVE_NOTE'}
         </button>
       </div>
     </form>

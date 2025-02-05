@@ -1,1 +1,30 @@
-{ "rewrites": [{ "source": "/(.*)", "destination": "/" }] }
+{
+    "version": 2,
+    "builds": [
+      { 
+        "src": "package.json",
+        "use": "@vercel/next",
+        "config": {
+          "maxDuration": 60
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/notes/([^/]+)",
+        "methods": ["DELETE", "PUT", "OPTIONS"],
+        "dest": "/api/notes/$1"
+      },
+      {
+        "src": "/api/notes",
+        "methods": ["POST", "GET", "OPTIONS"],
+        "dest": "/api/notes",
+        "headers": {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          "Access-Control-Allow-Headers": "*"
+        }
+      }
+    ]
+  }
+  

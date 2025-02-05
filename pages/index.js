@@ -75,23 +75,38 @@ export default function Home() {
       const res = await fetch(`/api/notes/${noteId}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${user.uid}`
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.uid}`,
+          'Cache-Control': 'no-cache'
         }
       });
 
-      if (!res.ok) {
-        throw new Error('Failed to delete note');
+      const text = await res.text();
+      let data;
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (e) {
+        console.error('Failed to parse response:', e);
+        if (res.ok) {
+          await fetchNotes();
+          return;
+        }
+        throw new Error('Invalid server response');
       }
 
-      await fetchNotes(); // Refresh notes after deletion
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to delete note');
+      }
+
+      await fetchNotes();
     } catch (error) {
-      console.error('Error deleting note:', error);
-      setError('Failed to delete note');
+      console.error('Delete operation failed:', error);
+      setError(`Failed to delete note: ${error.message}`);
     }
   };
 
   const handleEdit = (note) => {
-    console.log('Editing note:', note);
+    console.log('Setting note for edit:', note);
     setEditingNote(note);
   };
 
@@ -101,20 +116,35 @@ export default function Home() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.uid}`
+          'Authorization': `Bearer ${user.uid}`,
+          'Cache-Control': 'no-cache'
         },
         body: JSON.stringify(updatedNote)
       });
 
+      const text = await res.text();
+      let data;
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (e) {
+        console.error('Failed to parse response:', e);
+        if (res.ok) {
+          setEditingNote(null);
+          await fetchNotes();
+          return;
+        }
+        throw new Error('Invalid server response');
+      }
+
       if (!res.ok) {
-        throw new Error('Failed to update note');
+        throw new Error(data.error || 'Failed to update note');
       }
 
       setEditingNote(null);
       await fetchNotes();
     } catch (error) {
-      console.error('Error updating note:', error);
-      setError('Failed to update note');
+      console.error('Update operation failed:', error);
+      setError(`Failed to update note: ${error.message}`);
     }
   };
 
