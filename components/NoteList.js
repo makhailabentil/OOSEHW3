@@ -42,17 +42,17 @@ export default function NoteList({ notes, onDelete, onEdit }) {
     return (
       <div className="max-w-4xl mx-auto p-4">
         <div className="console-box">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2 sm:gap-4 mb-4">
             <button 
               onClick={() => setSelectedNote(null)}
-              className="console-button"
+              className="console-button w-full sm:w-auto"
             >
               {'<'} BACK
             </button>
-            <div className="space-x-2">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
               <button 
-                onClick={() => handleEditClick(selectedNote)}  // Updated this line
-                className="console-button"
+                onClick={() => handleEditClick(selectedNote)}
+                className="console-button w-full sm:w-auto"
               >
                 {'>'} EDIT
               </button>
@@ -61,7 +61,7 @@ export default function NoteList({ notes, onDelete, onEdit }) {
                   onDelete(selectedNote._id);
                   setSelectedNote(null);
                 }}
-                className="console-button text-red-400 border-red-400"
+                className="console-button w-full sm:w-auto text-red-400 border-red-400 hover:bg-red-400/10"
               >
                 {'>'} DELETE
               </button>
