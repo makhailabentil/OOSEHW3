@@ -2,6 +2,10 @@
 
 A minimalist note-taking application designed specifically for developers to capture and organize their technical learnings, code snippets, and development notes. Built with Next.js, Firebase Authentication, and MongoDB, DevNotes offers a clean interface with a Tron-inspired design.
 
+## Quick Start
+Test the application directly on your mobile or desktop device from this domain:
+[https://devnotes-tau.vercel.app/](https://devnotes-tau.vercel.app/)
+
 ## Tech Stack
 
 - **Frontend**: 
@@ -85,6 +89,7 @@ devnotes/
 - Chronological note listing
 - Responsive design
 - User-specific notes
+- Mobile-friendly image handling and compression
 
 ## API Endpoints
 - `GET /api/notes` - Fetch user's notes (requires authentication)
@@ -146,3 +151,10 @@ Note {
 ### Search
 1. Type in the search bar above the notes list
 2. Notes are filtered in real-time by title and content
+
+### Mobile Testing
+For the best experience testing on mobile:
+1. Visit [https://devnotes-tau.vercel.app/](https://devnotes-tau.vercel.app/)
+2. Sign in with Google
+3. Create notes with text and images
+4. Access your notes from any device
