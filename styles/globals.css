@@ -134,12 +134,10 @@ body {
 }
 
 .console-button {
-  @apply px-6 py-2 rounded-md transition-all duration-300;
-  background: transparent;
-  border: 2px solid var(--border-glow);
+  @apply px-4 py-2 border transition-all duration-200 hover:bg-cyan-500/10 w-full sm:w-auto;
+  border-color: var(--border-glow);
   color: var(--text-glow);
-  box-shadow: 0px 0px 10px 1px var(--box-shadow-glow) inset;
-  font-family: "Share Tech Mono", monospace;
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .console-button:hover {
@@ -248,8 +246,10 @@ input::placeholder {
 
 @media (max-width: 640px) {
   .console-button {
+
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
+
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -261,6 +261,7 @@ input::placeholder {
     padding: 1rem;
   }
 
+
   .flex.gap-2 {
     display: flex;
     flex-direction: row;
@@ -269,6 +270,7 @@ input::placeholder {
 
   .note-card {
     padding: 1rem;
+
   }
 }
 
