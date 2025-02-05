@@ -75,18 +75,33 @@ export default function Home() {
       const res = await fetch(`/api/notes/${noteId}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${user.uid}`
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.uid}`,
+          'Cache-Control': 'no-cache'
         }
       });
 
-      if (!res.ok) {
-        throw new Error('Failed to delete note');
+      // Try to parse JSON response, but handle cases where it might fail
+      let data;
+      try {
+        data = await res.json();
+      } catch (e) {
+        // If JSON parsing fails but status is OK, consider it a success
+        if (res.ok) {
+          await fetchNotes();
+          return;
+        }
+        throw new Error('Invalid response from server');
       }
 
-      await fetchNotes(); // Refresh notes after deletion
+      if (!res.ok) {
+        throw new Error(data?.error || 'Failed to delete note');
+      }
+
+      await fetchNotes();
     } catch (error) {
       console.error('Error deleting note:', error);
-      setError('Failed to delete note');
+      setError(`Failed to delete note: ${error.message}`);
     }
   };
 

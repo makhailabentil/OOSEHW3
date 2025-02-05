@@ -58,26 +58,33 @@ export default function NoteForm({ onSubmit, user, initialData }) {
     }
 
     try {
-      const url = initialData ? `/api/notes/${initialData._id}` : '/api/notes';
+      // Make sure we're using the correct endpoint
+      const url = initialData 
+        ? `/api/notes/${initialData._id}`  // For editing existing notes
+        : '/api/notes';                    // For creating new notes
+      
       const method = initialData ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.uid}`
+          Authorization: `Bearer ${user.uid}`,
         },
-        body: JSON.stringify({ title, content })
+        body: JSON.stringify({
+          title: title.trim(),
+          content: content.trim()
+        })
       });
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to save note');
+        throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
       }
 
       const data = await res.json();
       onSubmit && onSubmit(data);
-
+      
       if (!initialData) {
         setTitle('');
         setContent('');
@@ -85,7 +92,7 @@ export default function NoteForm({ onSubmit, user, initialData }) {
       setError(null);
     } catch (error) {
       console.error('Error saving note:', error);
-      setError('Failed to save note. Please try again.');
+      setError(`Failed to save note: ${error.message}`);
     }
   };
 
