@@ -213,3 +213,36 @@ input::placeholder {
   height: auto;
 }
 
+@media (max-width: 768px) {
+  .cyber-paper {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .console-box {
+    padding: 1rem;
+  }
+
+  .text-7xl {
+    font-size: 3rem;
+  }
+
+  .editor-wrapper {
+    min-height: 200px;
+  }
+
+  .ql-container {
+    height: 200px;
+  }
+}
+
+@media (max-width: 640px) {
+  .note-card {
+    padding: 1rem;
+  }
+
+  .console-button {
+    padding: 0.5rem 1rem;
+  }
+}
+

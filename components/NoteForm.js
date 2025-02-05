@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 
@@ -36,11 +36,18 @@ const ReactQuill = dynamic(
   { ssr: false }
 );
 
-export default function NoteForm({ onSubmit, user }) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+export default function NoteForm({ onSubmit, user, initialData }) {
+  const [title, setTitle] = useState(initialData ? initialData.title : '');
+  const [content, setContent] = useState(initialData ? initialData.content : '');
   const [error, setError] = useState(null);
   const quillRef = useRef(null);
+
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title);
+      setContent(initialData.content);
+    }
+  }, [initialData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,8 +58,11 @@ export default function NoteForm({ onSubmit, user }) {
     }
 
     try {
-      const res = await fetch('/api/notes', {
-        method: 'POST',
+      const url = initialData ? `/api/notes/${initialData._id}` : '/api/notes';
+      const method = initialData ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.uid}`
@@ -62,18 +72,20 @@ export default function NoteForm({ onSubmit, user }) {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to create note');
+        throw new Error(errorData.error || 'Failed to save note');
       }
 
       const data = await res.json();
       onSubmit && onSubmit(data);
 
-      setTitle('');
-      setContent('');
+      if (!initialData) {
+        setTitle('');
+        setContent('');
+      }
       setError(null);
     } catch (error) {
-      console.error('Error creating note:', error);
-      setError('Failed to create note. Please try again.');
+      console.error('Error saving note:', error);
+      setError('Failed to save note. Please try again.');
     }
   };
 

@@ -118,3 +118,31 @@ Note {
   rm -rf node_modules
   npm install
   ```
+
+## Testing CRUD Operations
+
+### Create
+1. Log in with Google
+2. Fill in the note title and content
+3. Click "SAVE_NOTE"
+
+### Read
+1. View all notes in the list below the form
+2. Click any note to view full details
+3. Use the search bar to filter notes by title or content
+
+### Update
+1. Open a note by clicking it
+2. Click the "EDIT" button
+3. Modify the note in the form
+4. Click "SAVE_NOTE" to update
+5. Note: Edited notes show an "EDITED" timestamp
+
+### Delete
+1. Open a note by clicking it
+2. Click the "DELETE" button
+3. Confirm the note is removed from the list
+
+### Search
+1. Type in the search bar above the notes list
+2. Notes are filtered in real-time by title and content

@@ -11,6 +11,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isFirstVisit, setIsFirstVisit] = useState(false);
+  const [editingNote, setEditingNote] = useState(null);
 
   const fetchNotes = async () => {
     if (!user) {
@@ -69,6 +70,54 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (noteId) => {
+    try {
+      const res = await fetch(`/api/notes/${noteId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${user.uid}`
+        }
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to delete note');
+      }
+
+      await fetchNotes(); // Refresh notes after deletion
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      setError('Failed to delete note');
+    }
+  };
+
+  const handleEdit = (note) => {
+    console.log('Editing note:', note);
+    setEditingNote(note);
+  };
+
+  const handleUpdate = async (updatedNote) => {
+    try {
+      const res = await fetch(`/api/notes/${editingNote._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.uid}`
+        },
+        body: JSON.stringify(updatedNote)
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to update note');
+      }
+
+      setEditingNote(null);
+      await fetchNotes();
+    } catch (error) {
+      console.error('Error updating note:', error);
+      setError('Failed to update note');
+    }
+  };
+
   return (
     <div className="notebook-background">
       <Head>
@@ -124,10 +173,18 @@ export default function Home() {
                   </div>
                 )}
                 <div className="mb-8">
-                  <NoteForm onSubmit={handleNewNote} user={user} />
+                  <NoteForm 
+                    onSubmit={editingNote ? handleUpdate : handleNewNote} 
+                    user={user} 
+                    initialData={editingNote}
+                  />
                 </div>
                 <div className="border-t border-gray-200 my-8"></div>
-                <NoteList notes={notes} />
+                <NoteList 
+                  notes={notes} 
+                  onDelete={handleDelete}
+                  onEdit={handleEdit}
+                />
               </>
             )}
           </main>
