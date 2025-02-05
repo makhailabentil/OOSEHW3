@@ -247,28 +247,28 @@ input::placeholder {
 }
 
 @media (max-width: 640px) {
-  .note-card {
-    padding: 1rem;
-  }
-
   .console-button {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
-  }
-
-  /* Make buttons more touch-friendly on mobile */
-  .console-button {
     min-height: 44px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: auto;
   }
 
-  /* Ensure proper spacing in mobile view */
-  .flex-col > .console-button,
-  .flex-col > div > .console-button {
-    width: 100%;
-    margin-bottom: 0.5rem;
+  .console-box {
+    padding: 1rem;
+  }
+
+  .flex.gap-2 {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .note-card {
+    padding: 1rem;
   }
 }
 

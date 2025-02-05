@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { auth, googleProvider } from '../lib/firebase';
-import { signInWithPopup, signOut } from 'firebase/auth';
+import { signInWithPopup, signOut, GoogleAuthProvider } from 'firebase/auth';
 
 const AuthContext = createContext({});
 
@@ -18,9 +18,19 @@ export function AuthProvider({ children }) {
 
   const login = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      // Sign out first to clear any existing session
+      await auth.signOut();
+      
+      const provider = new GoogleAuthProvider();
+      // Force account selection
+      provider.setCustomParameters({
+        prompt: 'select_account'
+      });
+      
+      const result = await signInWithPopup(auth, provider);
+      return result.user;
     } catch (error) {
-      console.error('Auth error:', error);
+      console.error('Login error:', error);
       throw error;
     }
   };
